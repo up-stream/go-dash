@@ -42,7 +42,7 @@ func TestReadingManifests(t *testing.T) {
 // TODO: Uncomment this test once https://github.com/golang/go/issues/9519 is fixed
 //func TestItProducesTheSameFileThatItRead(t *testing.T) {
 //	expectedManifest := testfixtures.LoadFixture("fixtures/live_profile.mpd")
-//	m, err := ReadFromFile("fixtures/simple.mpd")
+//	m, err := ReadFromFile("fixtures/live_profile.mpd")
 //	require.NoError(t, err)
 //
 //	writtenManifest, err := m.WriteToString()

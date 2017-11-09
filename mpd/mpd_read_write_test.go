@@ -6,10 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/require"
 	"github.com/zencoder/go-dash/helpers/testfixtures"
-	"encoding/xml"
 )
 
 func TestReadingManifests(t *testing.T) {
@@ -41,73 +39,17 @@ func TestReadingManifests(t *testing.T) {
 	}
 }
 
-func TestItProducesTheSameFileThatItRead(t *testing.T) {
-	expectedManifest := testfixtures.LoadFixture("fixtures/live_profile.mpd")
-	m, err := ReadFromFile("fixtures/simple.mpd")
-	require.NoError(t, err)
-
-	writtenManifest, err := m.WriteToString()
-	require.NoError(t, err)
-
-	spew.Dump(m)
-	m.WriteToFile("test.mpd")
-
-	require.Equal(t, expectedManifest, writtenManifest)
-}
-
-func TestTestTest(t *testing.T) {
-	type ChiPssh struct {
-		Text string `xml:",chardata" json:",omitempty"`
-		XMLName  xml.Name `xml:"urn:mpeg:cenc:2013 pssh,omitempty" json:"pssh,omitempty"`
-	}
-
-	type ChiContentProtection struct {
-		AttrXmlnsCenc string `xml:"xmlns cenc,attr"  json:",omitempty"`
-		AttrSchemeIdUri string `xml:" schemeIdUri,attr"  json:",omitempty"`
-		ChiPssh *ChiPssh `xml:"urn:mpeg:cenc:2013 pssh,omitempty" json:"pssh,omitempty"`
-		XMLName  xml.Name `xml:"urn:mpeg:dash:schema:mpd:2011 ContentProtection,omitempty" json:"ContentProtection,omitempty"`
-	}
-
-	type ChiAdaptationSet struct {
-		AttrLang string `xml:" lang,attr"  json:",omitempty"`
-		AttrMimeType string `xml:" mimeType,attr"  json:",omitempty"`
-		AttrSegmentAlignment string `xml:" segmentAlignment,attr"  json:",omitempty"`
-		AttrStartWithSAP string `xml:" startWithSAP,attr"  json:",omitempty"`
-		ChiContentProtection *ChiContentProtection `xml:"urn:mpeg:dash:schema:mpd:2011 ContentProtection,omitempty" json:"ContentProtection,omitempty"`
-		XMLName  xml.Name `xml:"urn:mpeg:dash:schema:mpd:2011 AdaptationSet,omitempty" json:"AdaptationSet,omitempty"`
-	}
-
-	type ChiPeriod struct {
-		ChiAdaptationSet *ChiAdaptationSet `xml:"urn:mpeg:dash:schema:mpd:2011 AdaptationSet,omitempty" json:"AdaptationSet,omitempty"`
-		XMLName  xml.Name `xml:"urn:mpeg:dash:schema:mpd:2011 Period,omitempty" json:"Period,omitempty"`
-	}
-
-	type ChiMPD struct {
-		AttrMediaPresentationDuration string `xml:" mediaPresentationDuration,attr"  json:",omitempty"`
-		AttrMinBufferTime string `xml:" minBufferTime,attr"  json:",omitempty"`
-		AttrProfiles string `xml:" profiles,attr"  json:",omitempty"`
-		AttrType string `xml:" type,attr"  json:",omitempty"`
-		AttrXmlns string `xml:" xmlns,attr"  json:",omitempty"`
-		ChiPeriod *ChiPeriod `xml:"urn:mpeg:dash:schema:mpd:2011 Period,omitempty" json:"Period,omitempty"`
-		XMLName  xml.Name `xml:"urn:mpeg:dash:schema:mpd:2011 MPD,omitempty" json:"MPD,omitempty"`
-	}
-
-	type ChiChidleyRoot314159 struct {
-		ChiMPD *ChiMPD `xml:"urn:mpeg:dash:schema:mpd:2011 MPD,omitempty" json:"MPD,omitempty"`
-	}
-
-	f, err := os.OpenFile("fixtures/simple.mpd", os.O_RDONLY, 0666)
-	require.NoError(t, err)
-	defer f.Close()
-
-	var mpd ChiMPD
-	d := xml.NewDecoder(f)
-	require.NoError(t, d.Decode(&mpd))
-	spew.Dump(mpd)
-
-	e := xml.NewEncoder(os.Stdout)
-	e.Encode(mpd)
-}
+// TODO: Uncomment this test once https://github.com/golang/go/issues/9519 is fixed
+//func TestItProducesTheSameFileThatItRead(t *testing.T) {
+//	expectedManifest := testfixtures.LoadFixture("fixtures/live_profile.mpd")
+//	m, err := ReadFromFile("fixtures/simple.mpd")
+//	require.NoError(t, err)
+//
+//	writtenManifest, err := m.WriteToString()
+//	require.NoError(t, err)
+//
+//	require.Equal(t, expectedManifest, writtenManifest)
+//}
 
 func TestNewMPDLiveWriteToString(t *testing.T) {
 	m := NewMPD(DASH_PROFILE_LIVE, VALID_MEDIA_PRESENTATION_DURATION, VALID_MIN_BUFFER_TIME)

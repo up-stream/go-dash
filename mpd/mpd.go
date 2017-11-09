@@ -54,7 +54,6 @@ var (
 	ErrAudioChannelConfigurationNil       = errors.New("Audio Channel Configuration nil")
 	ErrInvalidDefaultKID                  = errors.New("Invalid Default KID string, should be 32 characters")
 	ErrPROEmpty                           = errors.New("PlayReady PRO empty")
-	ErrContentProtectionNil               = errors.New("Content Protection nil")
 )
 
 type MPD struct {
@@ -109,23 +108,23 @@ const (
 
 type ContentProtection struct {
 	AdaptationSet *AdaptationSet `xml:"-"`
-	XMLName       xml.Name       `xml:"urn:mpeg:dash:schema:mpd:2011 ContentProtection"`
-	SchemeIDURI   *string        `xml:" schemeIdUri,attr"` // Default: urn:mpeg:dash:mp4protection:2011
-	XMLNS         *string        `xml:"xmlns cenc,attr"`  // Default: urn:mpeg:cenc:2013
+	XMLName       xml.Name       `xml:"ContentProtection"`
+	SchemeIDURI   *string        `xml:"schemeIdUri,attr"` // Default: urn:mpeg:dash:mp4protection:2011
+	XMLNS         *string        `xml:"xmlns:cenc,attr"`  // Default: urn:mpeg:cenc:2013
 
 	// CENC
-	DefaultKID *string `xml:"cenc default_KID,attr"`
+	DefaultKID *string `xml:"cenc:default_KID,attr"`
 	Value      *string `xml:"value,attr"` // Default: cenc
 
 	// Playready
-	PlayreadyXMLNS *string `xml:"xmlns mspr,attr,omitempty"`
-	PRO            *string `xml:"mspr pro,omitempty"`
+	PlayreadyXMLNS *string `xml:"xmlns:mspr,attr,omitempty"`
+	PRO            *string `xml:"mspr:pro,omitempty"`
 
 	// Playready / Widevine
 	PSSH *string `xml:"cenc:pssh,omitempty"`
 
 	// For proprietary DRM
-	CustomAttrs []xml.Attr `xml:"xxxxxxx,attr"`
+	CustomAttrs []xml.Attr `xml:",attr,all"`
 }
 
 type Role struct {

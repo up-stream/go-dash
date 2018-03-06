@@ -60,14 +60,19 @@ var (
 )
 
 type MPD struct {
-	XMLNs                     *string `xml:"xmlns,attr"`
-	Profiles                  *string `xml:"profiles,attr"`
-	Type                      *string `xml:"type,attr"`
-	MediaPresentationDuration *string `xml:"mediaPresentationDuration,attr"`
-	MinBufferTime             *string `xml:"minBufferTime,attr"`
-	BaseURL                   string  `xml:"BaseURL,omitempty"`
-	period                    *Period
-	Periods                   []*Period `xml:"Period,omitempty"`
+	XMLNs                      *string `xml:"xmlns,attr"`
+	Profiles                   *string `xml:"profiles,attr"`
+	Type                       *string `xml:"type,attr"`
+	MediaPresentationDuration  *string `xml:"mediaPresentationDuration,attr,omitempty"`
+	MinUpdatePeriod            *string `xml:"minimumUpdatePeriod,attr"`
+	PublishTime                *string `xml:"publishTime,attr"`
+	AvailabilityStartTime      *string `xml:"availabilityStartTime,attr"`
+	TimeShiftBufferDepth       *string `xml:"timeShiftBufferDepth,attr"`
+	SuggestedPresentationDelay *string `xml:"suggestedPresentationDelay,attr"`
+	MinBufferTime              *string `xml:"minBufferTime,attr"`
+	BaseURL                    string  `xml:"BaseURL,omitempty"`
+	period                     *Period
+	Periods                    []*Period `xml:"Period,omitempty"`
 }
 
 type Period struct {
